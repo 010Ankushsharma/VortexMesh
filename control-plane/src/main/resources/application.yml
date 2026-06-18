@@ -1,0 +1,28 @@
+server:
+  port: 8750
+
+spring:
+  application:
+    name: vortex-control-plane
+  datasource:
+    url: jdbc:postgresql://localhost:5432/vortexmesh_control
+    username: vortex
+    password: vortex123
+  jpa:
+    hibernate:
+      ddl-auto: update
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
