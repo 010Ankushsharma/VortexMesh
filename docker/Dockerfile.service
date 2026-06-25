@@ -1,0 +1,15 @@
+FROM eclipse-temurin:21-jdk-alpine AS build
+WORKDIR /app
+COPY pom.xml .
+COPY common-lib ./common-lib
+ARG SERVICE
+COPY ${SERVICE} ./${SERVICE}
+RUN --mount=type=cache,target=/root/.m2 \
+    cd /app && mvn -pl common-lib,${SERVICE} -am clean package -DskipTests
+
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+ARG SERVICE
+COPY --from=build /app/${SERVICE}/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-XX:+UseG1GC", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
