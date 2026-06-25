@@ -1,4 +1,4 @@
-server:
+git commit -m "Add auth-service"server:
   port: 8770
 
 spring:
